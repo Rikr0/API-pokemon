@@ -20,24 +20,50 @@
             img-alt="Image"
             img-top
           >
-            <b-card-text> </b-card-text>
+            <b-card-text>
+              <b-row class="justify-content-center">
+                <b-col cols="4">
+                  <img
+                    :src="imgs[poke.status]"
+                    class="img-fluid"
+                    @click="capturar(poke.id)"
+                  />
+                </b-col>
+                <b-col cols="4">
+                  <img
+                    src="../assets/pokedex.jpg"
+                    class="img-fluid"
+                    @click="showModal(poke.id, poke.name)"
+                  />
+                </b-col>
+              </b-row>
+            </b-card-text>
             <template #footer> </template>
           </b-card>
         </b-col>
       </b-row>
     </b-card-group>
+    <Pokedex ref="showM" />
   </b-container>
 </template>
 <script>
 import axios from "axios";
+import img0 from "../assets/poke-0.jpg";
+import img1 from "../assets/poke-1.jpg";
+import Pokedex from "@/components/Pokedex.vue";
 export default {
   name: "API-pokemon",
+  components: {
+    Pokedex,
+  },
   data: () => ({
     pokemons: [],
+    pokemonsTemp: [],
     paginaActual: 1,
     paginaActualAux: 1,
     itemsPorPagina: 6,
     loading: true,
+    imgs: [img0, img1],
   }),
   methods: {
     async getPokemon() {
@@ -49,7 +75,9 @@ export default {
           this.pokemons = res.data.results;
           this.pokemons.forEach((poke, index) => {
             this.pokemons[index].id = index + 1;
+            this.pokemons[index].status = 0;
           });
+          this.pokemonsTemp = this.pokemons;
           setTimeout(() => {
             this.loading = false;
           }, 1000);
@@ -67,6 +95,17 @@ export default {
     },
     capitalize(word) {
       return word[0].toUpperCase() + word.slice(1);
+    },
+    capturar(id) {
+      this.pokemons = [];
+      let index = this.pokemonsTemp.findIndex((poke) => poke.id === id);
+      console.log(this.pokemonsTemp[index].status);
+      this.pokemonsTemp[index].status = 1;
+      console.log(this.pokemonsTemp[index].status);
+      this.pokemons = this.pokemonsTemp;
+    },
+    showModal(id, name) {
+      this.$refs.showM.showModal(id, name);
     },
   },
   computed: {
