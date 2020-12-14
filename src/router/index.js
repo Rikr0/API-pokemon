@@ -11,7 +11,7 @@ const routes = [
     component: Home
   },
   {
-    path: '/api-pokemon',
+    path: '/pokemons',
     name: 'API-pokemon',
     component: () => import('@/views/API-pokemon.vue')
   }

@@ -1,12 +1,7 @@
 <template>
   <b-container>
     {{ statusLoanding }}
-    <img
-      v-if="pokemonsCap.length != 0"
-      :src="imgs[1]"
-      alt="pokebola"
-      class="img-fluid floating"
-    />
+    <Pokebola />
     <b-pagination
       align="center"
       :total-rows="pokemons.length"
@@ -14,6 +9,7 @@
       :per-page="itemsPorPagina"
       pills
       size="lg"
+      class="mt-3"
     >
     </b-pagination>
     <b-card-group deck>
@@ -68,19 +64,21 @@
   </b-container>
 </template>
 <script>
+import { mapState, mapMutations } from "vuex";
 import axios from "axios";
 import img0 from "../assets/poke-0.png";
 import img1 from "../assets/poke-1.png";
 import Pokedex from "@/components/Pokedex.vue";
+import Pokebola from "@/components/Pokebola.vue";
 export default {
   name: "API-pokemon",
   components: {
     Pokedex,
+    Pokebola,
   },
   data: () => ({
     pokemons: [],
     pokemonsTemp: [],
-    pokemonsCap: [],
     paginaActual: 1,
     paginaActualAux: 1,
     itemsPorPagina: 12,
@@ -88,6 +86,7 @@ export default {
     imgs: [img0, img1],
   }),
   methods: {
+    ...mapMutations(["pokemon_capturados"]),
     async getPokemon() {
       let path = "https://pokeapi.co/api/v2/pokemon?offset=0&limit=60";
       try {
@@ -95,24 +94,15 @@ export default {
         //console.log(res.data);
         if (res.data) {
           this.pokemons = res.data.results;
-          this.pokemons.forEach((poke, index) => {
+          await this.pokemons.forEach((poke, index) => {
             this.pokemons[index].id = index + 1;
             this.pokemons[index].status = 0;
           });
 
-          if (localStorage.getItem("pokemons-capturados")) {
-            //saber si hay pokemons guardados en localStorage
-            this.pokemonsCap = JSON.parse(
-              localStorage.getItem("pokemons-capturados")
-            );
-            this.pokemonsCap.forEach((pokeC) => {
-              let index = this.pokemons.findIndex(
-                (poke) => poke.id == pokeC.id
-              );
-              this.pokemons[index].status = 1;
-            });
-          }
-
+          await this.pokemonsCap.forEach((pokeC) => {
+            let index = this.pokemons.findIndex((poke) => poke.id == pokeC.id);
+            this.pokemons[index].status = 1;
+          });
           this.pokemonsTemp = this.pokemons;
           setTimeout(() => {
             this.loading = false;
@@ -140,10 +130,12 @@ export default {
       let index = this.pokemonsTemp.findIndex((poke) => poke.id === id);
       this.pokemonsTemp[index].status = 1;
       this.pokemons = this.pokemonsTemp;
+
       this.pokemonsCap.push({
         id: this.pokemons[index].id,
         name: this.pokemons[index].name,
       });
+
       localStorage.setItem(
         "pokemons-capturados",
         JSON.stringify(this.pokemonsCap)
@@ -172,6 +164,7 @@ export default {
     },
   },
   computed: {
+    ...mapState(["pokemonsCap"]),
     statusLoanding() {
       if (this.paginaActual == this.paginaActualAux) {
       } else {
@@ -183,7 +176,8 @@ export default {
       }
     },
   },
-  created() {
+  async created() {
+    await this.pokemon_capturados();
     this.getPokemon();
   },
 };

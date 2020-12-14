@@ -1,9 +1,5 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Inicio</router-link> |
-      <router-link to="/api-pokemon">API-pokemon</router-link>
-    </div>
     <router-view />
   </div>
 </template>
