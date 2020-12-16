@@ -1,40 +1,63 @@
 <template>
   <div class="div-floating">
-    <img
-      v-if="pokemonsCap.length != 0"
-      src="@/assets/poke-1.png"
-      alt="pokebola"
-      class="img-fluid"
-      id="img-poke"
-      v-b-toggle="'collapse-2'"
-    />
-    <b-collapse id="collapse-2" class="scroll-poke">
-      <b-card-group>
-        <b-row align-h="end">
-          <b-col
+    <b-row>
+      <b-col>
+        <b-badge variant="warning" pill>
+          {{ pokemonsCap.length }}
+        </b-badge>
+        <img
+          src="@/assets/poke-1.png"
+          alt="pokebola"
+          class="img-fluid"
+          id="img-poke"
+          v-b-toggle="'collapse-2'"
+        />
+      </b-col>
+    </b-row>
+    <b-row v-if="pokemonsCap.length != 0">
+      <b-collapse id="collapse-2" class="scroll-poke">
+        <b-list-group>
+          <b-list-group-item
             v-for="(poke, index) in pokemonsCap"
             :key="index"
-            md="3"
-            class="no-padding"
+            class="fondo-list"
           >
-            <b-card
-              :border-variant="color(index)"
-              :header="capitalize(poke.name)"
-              :header-border-variant="color(index)"
-              :header-text-variant="color(index)"
-              align="center"
-              style="height: 100%"
+            <img
+              :src="`${urlImg}${poke.id}.gif`"
+              :alt="poke.name"
+              class="img-fluid"
+              v-b-tooltip.hover.top="capitalize(poke.name)"
+            />
+          </b-list-group-item>
+        </b-list-group>
+
+        <b-card-group v-if="1 == 2">
+          <b-row align-h="end">
+            <b-col
+              v-for="(poke, index) in pokemonsCap"
+              :key="index"
+              md="3"
+              class="no-padding"
             >
-              <img
-                :src="`${urlImg}${poke.id}.gif`"
-                :alt="poke.name"
-                class="img-fluid"
-              />
-            </b-card>
-          </b-col>
-        </b-row>
-      </b-card-group>
-    </b-collapse>
+              <b-card
+                :border-variant="color(index)"
+                :header="capitalize(poke.name)"
+                :header-border-variant="color(index)"
+                :header-text-variant="color(index)"
+                align="center"
+                style="height: 100%"
+              >
+                <img
+                  :src="`${urlImg}${poke.id}.gif`"
+                  :alt="poke.name"
+                  class="img-fluid"
+                />
+              </b-card>
+            </b-col>
+          </b-row>
+        </b-card-group>
+      </b-collapse>
+    </b-row>
   </div>
 </template>
 <script>
@@ -65,7 +88,6 @@ export default {
   background-color: red;
 }
 .div-floating {
-  width: 50%;
   position: fixed;
   float: right;
   right: 0px;
@@ -83,5 +105,8 @@ export default {
 .no-padding {
   padding-right: 1px !important;
   padding-left: 1px !important;
+}
+.fondo-list {
+  background-color: #959595;
 }
 </style>

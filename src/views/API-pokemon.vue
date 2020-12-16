@@ -16,7 +16,7 @@
       <b-row>
         <b-col
           md="3"
-          class="mb-3"
+          class="mb-1"
           v-for="(poke, index) in paginador(pokemons)"
           :key="index"
         >
@@ -29,7 +29,7 @@
             border-variant="warning"
           >
             <b-card-text>
-              <b-row class="justify-content-center my-3">
+              <b-row class="justify-content-center">
                 <b-col cols="6">
                   <img
                     :src="imgs[poke.status]"
@@ -46,7 +46,6 @@
                 </b-col>
               </b-row>
             </b-card-text>
-            <template #footer> </template>
           </b-card>
         </b-col>
       </b-row>
@@ -183,9 +182,6 @@ export default {
 };
 </script>
 <style scoped>
-.card-footer {
-  background-color: red;
-}
 .floating {
   width: 100px;
   position: fixed;
