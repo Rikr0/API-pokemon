@@ -5,13 +5,13 @@ import Home from '../views/Home.vue'
 Vue.use(VueRouter)
 
 const routes = [
+  // {
+  //   path: '/',
+  //   name: 'Home',
+  //   component: Home
+  // },
   {
     path: '/',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/pokemons',
     name: 'API-pokemon',
     component: () => import('@/views/API-pokemon.vue')
   }
