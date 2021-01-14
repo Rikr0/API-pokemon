@@ -22,12 +22,25 @@
             :key="index"
             class="fondo-list"
           >
-            <img
-              :src="`${urlImg}${poke.id}.gif`"
-              :alt="poke.name"
-              class="img-fluid"
-              v-b-tooltip.hover.top="capitalize(poke.name)"
-            />
+          <b-row>
+            <b-col cols="12" class="text-right">
+              <b-icon
+                icon="x-circle"
+                scale="1.5"
+                variant="danger"
+                v-b-tooltip.hover.top="capitalize('Liberar')"
+                @click="liberar(poke.id)"
+            ></b-icon>
+            </b-col>
+            <b-col col="12">
+              <img
+                :src="`${urlImg}${poke.id}.gif`"
+                :alt="poke.name"
+                class="img-fluid"
+                v-b-tooltip.hover.top="capitalize(poke.name)"
+              />
+            </b-col>
+          </b-row>
           </b-list-group-item>
         </b-list-group>
 
@@ -76,6 +89,10 @@ export default {
       let num = index + 1;
       return num % 2 == 0 ? "danger" : "warning";
     },
+    liberar(id){
+      this.$emit("click", id);
+      //this.$root.liberar(id);
+    }
   },
   computed: {
     ...mapState(["pokemonsCap"]),

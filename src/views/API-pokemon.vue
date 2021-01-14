@@ -1,7 +1,7 @@
 <template>
   <b-container>
     {{ statusLoanding }}
-    <Pokebola />
+    <Pokebola @click="liberar"/>
     <b-pagination
       align="center"
       :total-rows="pokemons.length"
